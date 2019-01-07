@@ -1,4 +1,4 @@
-local make_polyamonds = require "namonds"
+local make_polyamonds = require "polyamonds"
 
 local function print_shape(s)
 
