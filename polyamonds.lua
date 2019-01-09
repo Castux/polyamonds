@@ -300,5 +300,6 @@ end
 return 
 {
 	make_polyamonds = make_polyamonds,
-	uncanonize_triangle = uncanonize_triangle
+	uncanonize_triangle = uncanonize_triangle,
+	make_variants = make_variants
 }

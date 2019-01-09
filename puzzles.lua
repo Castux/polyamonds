@@ -16,36 +16,9 @@ local function parallelogram_triangles()
 		table.insert(tris, {x, 4, "down"})
 	end
 	
-	
 	return tris
 end
 
-local function triangles_to_puzzle(tris)
-	
-	local points = {}
-	
-	for _,t in ipairs(tris) do
-		
-		local t = utils.copy(t)
-		polyamonds.uncanonize_triangle(t)
-		
-		for _,p in ipairs(t) do
-			points[p[1]..":"..p[2]] = p
-		end
-	end
-	
-	local res = {}
-	for _,p in pairs(points) do
-		table.insert(res, p)
-	end
-	
-	return
-	{
-		triangles = tris,
-		points = res
-	}
-end
-
-local parallelogram = triangles_to_puzzle(parallelogram_triangles())
+local parallelogram = parallelogram_triangles()
 
 return { parallelogram }
