@@ -92,20 +92,44 @@ local function canonize_shape(s)
 	end
 end
 
-local function make_variants(s)
+-- A symmetry group is represented with
+-- { mirror = bool, rotation = angle }
+-- angle is a multiple of 30 degrees
 
-	local a,b = copy(s),copy(s)
-	mirror_shape(b)
+local full_symmetries =
+{
+	mirror = true,
+	rotation = 1
+}
 
-	local candidates = {a,b}
+local function make_variants(s, symmetries)
+	
+	local symmetries = symmetries or full_symmetries
+	local num_rotations
 
-	for i = 1,5 do
-		a,b = copy(a),copy(b)
-		rotate_shape(a)
-		rotate_shape(b)
+	if symmetries.rotation == 0 then
+		num_rotations = 1
+	else
+		num_rotations = 6 / symmetries.rotation
+	end
 
-		table.insert(candidates, a)
-		table.insert(candidates, b)
+	local candidates = {}
+	
+	for i = 1,num_rotations do
+		
+		local tmp = copy(s)
+		
+		for _ = 1, i * symmetries.rotation do
+			rotate_shape(tmp)
+			table.insert(candidates, tmp)
+		end
+		
+		if symmetries.mirror then
+			tmp = copy(tmp)
+			mirror_shape(tmp)
+			table.insert(candidates, tmp)
+		end
+		
 	end
 
 	local variants = {}

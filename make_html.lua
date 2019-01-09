@@ -23,7 +23,7 @@ local html_footer = [[
 ]]
 
 
-function make_polyamonds_html(fp, min_size, max_size)
+local function make_polyamonds_html(fp, min_size, max_size)
 
 	max_size = max_size or min_size
 
@@ -50,7 +50,7 @@ function make_polyamonds_html(fp, min_size, max_size)
 	fp:write(html_footer)
 end
 
-function make_puzzle_html(fp, puzzle)
+local function make_puzzle_html(fp, puzzle)
 	
 	local shapes = polyamonds.make_polyamonds(6)[6]
 	local results = solver.solve(puzzle, shapes)
@@ -65,12 +65,23 @@ function make_puzzle_html(fp, puzzle)
 	fp:write(html_footer)
 end
 
+local function make_all_puzzles()
+	
+	for i,puzzle in ipairs(puzzles) do
+		print "========="
+		print ("Puzzle " .. i)
+		
+		local fp = io.open("puzzle" .. i .. ".html", "w")
+		make_puzzle_html(fp, puzzle)
+		fp:close()
+	end
+	
+end
 
-
+---[[
 local fp = io.open("polyamonds.html", "w")
-make_html(fp, 1, 12)
+make_polyamonds_html(fp, 1, 6)
 fp:close()
+--]]
 
-local fp = io.open("puzzle2.html", "w")
-make_puzzle_html(fp, puzzles[2])
-fp:close()
+--make_all_puzzles()

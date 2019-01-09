@@ -71,6 +71,16 @@ local function solve(puzzle, shapes)
 	for i,shape in ipairs(shapes) do
 		shapes[i] = polyamonds.make_variants(shape)
 	end
+	
+	-- Reduce the biggest variant to a single shape to remove symmetries in the results
+	-- FIXME: should reduce a shape depending on the symmetry group of the puzzle
+	
+	for i,variants in ipairs(shapes) do
+		if #variants == 12 then
+			shapes[i] = { variants[1] }
+			break
+		end
+	end
 
 	-- Build state
 

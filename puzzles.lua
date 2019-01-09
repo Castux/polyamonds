@@ -42,7 +42,6 @@ local function trihex()
 		{1, 2, "down"}
 	}
 
-
 	-- Duplicate and flip down horizontally
 
 	local tmp = {}
