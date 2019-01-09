@@ -4,43 +4,10 @@
 -- Shapes are canonized by sorting their triangles in lexicographic order and translating them to have
 -- their first point at (0,0)
 
-local function copy(t)
+local utils = require "utils"
 
-	if type(t) == "table" then
-		local res = {}
-		for k,v in pairs(t) do
-			res[k] = copy(v)
-		end
-
-		return res
-	else
-		return t
-	end
-end
-
-local function equal(a,b)
-
-	if type(a) == "table" and type(b) == "table" then
-
-		for k,v in pairs(a) do
-			if not equal(v, b[k]) then
-				return false
-			end
-		end
-
-		for k,v in pairs(b) do
-			if not equal(v, a[k]) then
-				return false
-			end
-		end
-
-		return true
-
-	else
-		return a == b
-	end
-
-end
+local copy = utils.copy
+local equal = utils.equal
 
 local function lexicographic_order(a,b)
 
@@ -330,4 +297,8 @@ local function make_polyamonds(n)
 	return shapes
 end
 
-return make_polyamonds
+return 
+{
+	make_polyamonds = make_polyamonds,
+	uncanonize_triangle = uncanonize_triangle
+}

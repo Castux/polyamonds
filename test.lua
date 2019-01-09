@@ -1,4 +1,5 @@
-local make_polyamonds = require "polyamonds"
+local polyamonds = require "polyamonds"
+local draw = require "draw"
 
 local function print_shape(s)
 
@@ -9,7 +10,7 @@ local function print_shape(s)
 	print ""
 end
 
-local foo = make_polyamonds(6)
+local foo = polyamonds.make_polyamonds(6)
 
 for i = 1,6 do
 	print "======"
@@ -17,6 +18,6 @@ for i = 1,6 do
 	print ""
 	
 	for _,v in ipairs(foo[i]) do
-		print_shape(v)
+		print(draw.draw_shape(v))
 	end
 end
