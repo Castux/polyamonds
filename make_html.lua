@@ -72,6 +72,6 @@ make_html(fp, 1, 12)
 fp:close()
 --]]
 
-local fp = io.open("puzzle.html", "w")
-make_puzzle_html(fp, puzzles[1])
+local fp = io.open("puzzle2.html", "w")
+make_puzzle_html(fp, puzzles[2])
 fp:close()

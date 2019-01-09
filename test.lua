@@ -3,18 +3,9 @@ local draw = require "draw"
 local puzzles = require "puzzles"
 local solver = require "solver"
 
---[[
-local p = puzzles[1]
-local t = draw.draw_shape(p.triangles)
+local p = puzzles[2]
+local t = draw.draw_shape(p)
 
-local fp = io.open("test.svg", "w")
+local fp = io.open("test.html", "w")
 fp:write(t)
 fp:close()
-
-print(#p.points)
---]]
-
-local puzzle = puzzles[1]
-local shapes = polyamonds.make_polyamonds(6)[6]
-
-local results = solver.solve(puzzle, shapes)
