@@ -8,6 +8,10 @@ local TRI_HEIGHT = math.sin(math.pi / 3)
 local DIRS = {"up", "down"}
 local PALETTE = {"red", "green", "blue", "cyan", "yellow", "orange", "purple", "grey", "magenta", "brown", "pink", "olive"}
 
+local function truncate(f)
+	return math.floor(f * 100) / 100
+end
+
 local function to_cartesian(x,y)
 
 	local u,v
@@ -51,8 +55,8 @@ local function draw_shape(s)
 		for i,p in ipairs(t) do
 
 			p[1],p[2] = to_cartesian(p[1],p[2])
-			p[1] = p[1] * scale
-			p[2] = p[2] * scale
+			p[1] = truncate(p[1] * scale)
+			p[2] = truncate(p[2] * scale)
 
 
 			minx = math.min(minx, p[1])
@@ -110,13 +114,13 @@ local function draw_solver_state(state)
 					polyamonds.uncanonize_triangle(c)
 					for _,p in ipairs(c) do
 						p[1],p[2] = to_cartesian(p[1],p[2])
-						p[1] = p[1] * scale
-						p[2] = p[2] * scale
+						p[1] = truncate(p[1] * scale)
+						p[2] = truncate(p[2] * scale)
 						
 						minx = math.min(minx, p[1])
 						miny = math.min(miny, p[2])
-						maxx = math.max(maxx, p[1])
-						maxy = math.max(maxy, p[2])
+						maxx = math.max(maxx, p[1] + scale)
+						maxy = math.max(maxy, p[2] + scale)
 					end
 
 					table.insert(res, draw_triangle(c, 0, 0, 15, "fill:" .. color))
