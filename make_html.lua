@@ -1,5 +1,7 @@
 local polyamonds = require "polyamonds"
 local draw = require "draw"
+local puzzles = require "puzzles"
+local solver = require "solver"
 
 local html_header = [[
 <!DOCTYPE html>
@@ -12,7 +14,7 @@ local html_header = [[
 ]]
 
 local html_title = [[
-<h1>Size %d</h1>
+<h1>%s</h1>
 ]]
 
 local html_footer = [[
@@ -21,7 +23,7 @@ local html_footer = [[
 ]]
 
 
-function make_html(fp, min_size, max_size)
+function make_polyamonds_html(fp, min_size, max_size)
 
 	max_size = max_size or min_size
 
@@ -37,7 +39,7 @@ function make_html(fp, min_size, max_size)
 
 	for size = min_size,max_size do
 
-		fp:write(string.format(html_title, size))
+		fp:write(string.format(html_title, "Size " .. size))
 
 		for _,shape in ipairs(shapes[size]) do
 			local svg = draw.draw_shape(shape)
@@ -48,6 +50,28 @@ function make_html(fp, min_size, max_size)
 	fp:write(html_footer)
 end
 
+function make_puzzle_html(fp, puzzle)
+	
+	local shapes = polyamonds.make_polyamonds(6)[6]
+	local results = solver.solve(puzzle, shapes)
+	
+	fp:write(string.format(html_header, "Polyamond puzzle"))
+	fp:write(string.format(html_title, #results .. " solutions"))
+	
+	for _,result in ipairs(results) do
+		fp:write(draw.draw_solver_state(result), "\n")
+	end
+	
+	fp:write(html_footer)
+end
+
+
+--[[
 local fp = io.open("polyamonds.html", "w")
 make_html(fp, 1, 12)
+fp:close()
+--]]
+
+local fp = io.open("puzzle.html", "w")
+make_puzzle_html(fp, puzzles[1])
 fp:close()

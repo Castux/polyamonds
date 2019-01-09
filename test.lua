@@ -17,4 +17,4 @@ print(#p.points)
 local puzzle = puzzles[1]
 local shapes = polyamonds.make_polyamonds(6)[6]
 
-solver.solve(puzzle, shapes)
+local results = solver.solve(puzzle, shapes)

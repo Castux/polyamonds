@@ -87,14 +87,18 @@ local function draw_solver_state(state)
 
 	local scale = 20
 	local res = {}
-	table.insert(res, string.format('<svg height="300" width="300">', h, w))
+	
+	local minx,miny = math.huge, math.huge
+	local maxx,maxy = -math.huge, -math.huge
+	
+	local triangles = state.triangles
 
-	for x,_ in pairs(state) do
-		for y,_ in pairs(state[x]) do
+	for x,_ in pairs(triangles) do
+		for y,_ in pairs(triangles[x]) do
 			for _,dir in pairs(DIRS) do
 
 				local color
-				local cell = state[x][y][dir]
+				local cell = triangles[x][y][dir]
 				if cell then
 					if cell == "empty" then
 						color = "black"
@@ -108,14 +112,29 @@ local function draw_solver_state(state)
 						p[1],p[2] = to_cartesian(p[1],p[2])
 						p[1] = p[1] * scale
 						p[2] = p[2] * scale
+						
+						minx = math.min(minx, p[1])
+						miny = math.min(miny, p[2])
+						maxx = math.max(maxx, p[1])
+						maxy = math.max(maxy, p[2])
 					end
 
-					table.insert(res, draw_triangle(c, 0, 0, 15, "fill:" .. color .. ";stroke-width:0"))
-				end				
+					table.insert(res, draw_triangle(c, 0, 0, 15, "fill:" .. color))
+				end
 			end
 		end
 	end
 
+	local margin = scale / 2
+	local w = maxx - minx + 2 * margin
+	local h = maxy - miny + 2 * margin
+	
+	table.insert(res, 1, string.format('<svg width="%d" height="%d" viewbox="%d %d %d %d" >',
+			w, h,
+			minx - margin, miny - margin,
+			w, h
+	))
+	
 	table.insert(res, '</svg>')
 
 	return table.concat(res, '\n')
