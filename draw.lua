@@ -5,7 +5,6 @@ local copy = utils.copy
 local equal = utils.equal
 
 local TRI_HEIGHT = math.sin(math.pi / 3)
-local SCALE = 30
 
 local function to_cartesian(x,y)
 
@@ -14,7 +13,7 @@ local function to_cartesian(x,y)
 	u = 1 * x + 0.5        * y
 	v = 0 * x + TRI_HEIGHT * y
 
-	return u * SCALE, v * SCALE
+	return u,v
 end
 
 local function draw_triangle(t, ox, oy, margin)
@@ -35,7 +34,9 @@ local function draw_triangle(t, ox, oy, margin)
 end
 
 local function draw_shape(s)
-
+	
+	local scale = 30
+	
 	-- Bounding box
 
 	local s = copy(s)
@@ -48,6 +49,9 @@ local function draw_shape(s)
 		for i,p in ipairs(t) do
 			
 			p[1],p[2] = to_cartesian(p[1],p[2])
+			p[1] = p[1] * scale
+			p[2] = p[2] * scale
+			
 			
 			minx = math.min(minx, p[1])
 			miny = math.min(miny, p[2])
@@ -60,7 +64,7 @@ local function draw_shape(s)
 	
 	local res = {}
 	
-	local margin = SCALE / 2
+	local margin = scale / 2
 	local w = maxx - minx + 2 * margin
 	local h = maxy - miny + 2 * margin
 
