@@ -1,23 +1,12 @@
 local polyamonds = require "polyamonds"
 local draw = require "draw"
+local puzzles = require "puzzles"
 
-local function print_shape(s)
+local p = puzzles[1]
+local t = draw.draw_shape(p.triangles)
 
-	for _,t in ipairs(s) do
-		io.write(table.concat(t, ","))
-		io.write " / "
-	end
-	print ""
-end
+local fp = io.open("test.svg", "w")
+fp:write(t)
+fp:close()
 
-local foo = polyamonds.make_polyamonds(6)
-
-for i = 1,6 do
-	print "======"
-	print(i)
-	print ""
-	
-	for _,v in ipairs(foo[i]) do
-		print(draw.draw_shape(v))
-	end
-end
+print(#p.points)

@@ -81,7 +81,6 @@ local function draw_shape(s)
 	return table.concat(res, "\n")
 end
 
-
 return
 {
 	draw_shape = draw_shape
