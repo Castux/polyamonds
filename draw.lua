@@ -110,7 +110,7 @@ local function draw_solver_state(state)
 						p[2] = p[2] * scale
 					end
 
-					table.insert(res, draw_triangle(c, 0, 0, 15, "fill:" .. color))
+					table.insert(res, draw_triangle(c, 0, 0, 15, "fill:" .. color .. ";stroke-width:0"))
 				end				
 			end
 		end

@@ -71,16 +71,16 @@ local function solve(puzzle, shapes)
 	-- Madness begins
 
 	local function rec(level)
-		
-		--[[
-		if level > 10 then
+
+		---[[
+		if level > 11 then
 			local fp = io.open("test.html", "w")
 			fp:write(draw.draw_solver_state(state))
 			fp:close()
 			os.exit()
 		end
 		--]]
-		
+
 		if level > #shapes then
 			-- Placed all pieces, it's a success!
 			table.insert(results, utils.copy(state))
@@ -90,15 +90,20 @@ local function solve(puzzle, shapes)
 
 
 		for _, triangle in ipairs(puzzle) do
-			for i, variant in ipairs(shapes[level]) do
-				if triangle[3] == variant[1][3] then
-					local success = add_shape(state, variant, triangle[1], triangle[2], level)
-					
-					if success then
+
+			if state[triangle[1]][triangle[2]][triangle[3]] == "empty" then
+
+				for i, variant in ipairs(shapes[level]) do
+					if triangle[3] == variant[1][3] then
+						
+						local success = add_shape(state, variant, triangle[1], triangle[2], level)
+
+						if success then
 							rec(level + 1)
 							remove_shape(state, variant, triangle[1], triangle[2])
+						end
+
 					end
-					
 				end
 			end
 		end
