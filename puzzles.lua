@@ -73,6 +73,4 @@ local function trihex()
 	return tris
 end
 
-
-
 return { parallelogram(), trihex() }

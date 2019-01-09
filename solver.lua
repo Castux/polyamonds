@@ -61,6 +61,11 @@ end
 
 local function solve(puzzle, shapes)
 
+	-- Sorting the triangles forces the solver to fill full rows
+	-- before moving on, eliminating large branches of the search tree
+
+	table.sort(puzzle, utils.lexicographic_order)
+
 	-- Make all shape variants
 
 	for i,shape in ipairs(shapes) do

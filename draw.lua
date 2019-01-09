@@ -133,7 +133,7 @@ local function draw_solver_state(state)
 	local w = maxx - minx + 2 * margin
 	local h = maxy - miny + 2 * margin
 	
-	table.insert(res, 1, string.format('<svg width="%d" height="%d" viewbox="%d %d %d %d" >',
+	table.insert(res, 1, string.format('<svg width="%f" height="%f" viewbox="%f %f %f %f" >',
 			w, h,
 			minx - margin, miny - margin,
 			w, h

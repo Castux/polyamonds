@@ -8,21 +8,7 @@ local utils = require "utils"
 
 local copy = utils.copy
 local equal = utils.equal
-
-local function lexicographic_order(a,b)
-
-	assert(#a == #b)
-
-	for i = 1,#a do
-
-		if a[i] ~= b[i] then
-			return a[i] < b[i]
-		end
-	end
-
-	return false
-end
-
+local lexicographic_order = utils.lexicographic_order
 
 local function rotate_point(x,y)
 

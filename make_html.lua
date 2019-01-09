@@ -66,11 +66,10 @@ function make_puzzle_html(fp, puzzle)
 end
 
 
---[[
+
 local fp = io.open("polyamonds.html", "w")
 make_html(fp, 1, 12)
 fp:close()
---]]
 
 local fp = io.open("puzzle2.html", "w")
 make_puzzle_html(fp, puzzles[2])

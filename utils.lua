@@ -36,8 +36,24 @@ local function equal(a,b)
 
 end
 
+
+local function lexicographic_order(a,b)
+
+	assert(#a == #b)
+
+	for i = 1,#a do
+
+		if a[i] ~= b[i] then
+			return a[i] < b[i]
+		end
+	end
+
+	return false
+end
+
 return
 {
 	copy = copy,
-	equal = equal
+	equal = equal,
+	lexicographic_order = lexicographic_order
 }
