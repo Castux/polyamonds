@@ -59,6 +59,41 @@ local function remove_shape(state, shape, x, y, id)
 	state.used_pieces[id] = nil
 end
 
+local function reduce_symmetries(variants, symmetries)
+	
+	local added = {}
+	
+	for _,variant in ipairs(variants) do
+		if not added[i] then
+			
+			local others = polyamonds.make_variants(variant, symmetries)
+			for _,other in ipairs(others) do
+				for i,previous in ipairs(variants) do
+				
+					if utils.equal(other,previous) then
+						if i == 1 then
+							added[i] = "base"
+						else
+							added[i] = "duplicate"
+						end
+					end
+				end
+			end
+			
+		end
+	end
+	
+	local result = {}
+	
+	for i,v in ipairs(variants) do
+		if added[i] == "base" then
+			table.insert(result, v)
+		end
+	end
+	
+	return result
+end
+
 local function solve(puzzle, shapes)
 
 	-- Sorting the triangles forces the solver to fill full rows
@@ -77,7 +112,7 @@ local function solve(puzzle, shapes)
 	
 	for i,variants in ipairs(shapes) do
 		if #variants == 12 then
-			shapes[i] = { variants[1] }
+			shapes[i] = reduce_symmetries(variants, puzzle.symmetries)
 			break
 		end
 	end

@@ -15,6 +15,13 @@ local function parallelogram()
 
 		table.insert(tris, {x, 4, "down"})
 	end
+	
+	tris.symmetries =
+	{
+		mirror = false,
+		rotation = 3
+	}
+	
 
 	return tris
 end
@@ -68,6 +75,12 @@ local function trihex()
 		
 		table.insert(tris, utils.copy(v))
 	end
+
+	tris.symmetries =
+	{
+		mirror = true,
+		rotation = 2
+	}
 
 	return tris
 end
