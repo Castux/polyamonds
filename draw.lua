@@ -6,7 +6,24 @@ local equal = utils.equal
 
 local TRI_HEIGHT = math.sin(math.pi / 3)
 local DIRS = {"up", "down"}
-local PALETTE = {"red", "green", "blue", "cyan", "yellow", "orange", "purple", "grey", "magenta", "brown", "pink", "olive"}
+--local PALETTE = {"red", "green", "blue", "cyan", "yellow", "orange", "purple", "grey", "magenta", "brown", "pink", "olive"}
+
+local PALETTE =
+{
+	--"#001f3f",
+	"#F012BE",
+	"#0074D9",
+	"#7FDBFF",
+	"#39CCCC",
+	"#3D9970",
+	"#2ECC40",
+	"#01FF70",
+	"#FFDC00",
+	"#FF851B",
+	"#FF4136",
+	"#85144b",
+	"#B10DC9"
+}
 
 local function truncate(f)
 	return math.floor(f * 100) / 100

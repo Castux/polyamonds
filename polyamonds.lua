@@ -10,13 +10,19 @@ local copy = utils.copy
 local equal = utils.equal
 local lexicographic_order = utils.lexicographic_order
 
-local function rotate_point(x,y)
+-- Angle expressed as multiples of 60 degrees
 
-	local u,v
+local function rotate_point(x,y,angle)
 
-	u = 0 * x - 1 * y
-	v = 1 * x + 1 * y
+	local angle = angle or 1
 
+	local u,v = x,y
+
+	for i = 1,angle do
+		u,v = 0 * u - 1 * v, 
+		      1 * u + 1 * v
+	end
+	
 	return u,v
 end
 
@@ -43,12 +49,12 @@ local function canonize_triangle(t)
 	t[3] = dy == 1 and "up" or "down"
 end
 
-local function rotate_triangle(t)
+local function rotate_triangle(t, angle)
 
 	uncanonize_triangle(t)
 
 	for i = 1,3 do
-		t[i][1],t[i][2] = rotate_point(t[i][1],t[i][2])
+		t[i][1],t[i][2] = rotate_point(t[i][1], t[i][2], angle)
 	end
 
 	canonize_triangle(t)
@@ -66,10 +72,10 @@ local function mirror_triangle(t)
 end
 
 
-local function rotate_shape(s)
+local function rotate_shape(s, angle)
 
 	for _,t in ipairs(s) do
-		rotate_triangle(t)
+		rotate_triangle(t, angle)
 	end
 end
 
@@ -92,39 +98,44 @@ local function canonize_shape(s)
 	end
 end
 
--- A symmetry group is represented with
--- { mirror = bool, rotation = angle }
--- angle is a multiple of 30 degrees
+-- A symmetry group is:
+-- C (cyclic: only rotations) or D (dihedral, also includes reflections)
+-- 1, 2, 3, or 6
 
-local full_symmetries =
-{
-	mirror = true,
-	rotation = 1
-}
+local full_symmetries = "D6"
 
-local function make_variants(s, symmetries)
+local function parse_symmetry(symmetries)
+	
+	assert(type(symmetries) == "string")
+	
+	local group_type = symmetries:sub(1,1)
+	assert(group_type == "C" or group_type == "D")
+	
+	local sides = tonumber(symmetries:sub(2,2))
+	assert(sides == 1 or sides == 2 or sides == 3 or sides == 6)
+	
+	return group_type, sides
+end
+
+-- Apply symmetries to a shape to find all possible variants
+
+local function make_variants(s, symmetries, unique)
 	
 	local symmetries = symmetries or full_symmetries
-	local num_rotations
-
-	if symmetries.rotation == 0 then
-		num_rotations = 1
-	else
-		num_rotations = 6 / symmetries.rotation
-	end
-
+	local group_type, sides = parse_symmetry(symmetries)
+	
 	local candidates = {}
 	
-	for i = 1,num_rotations do
+	local angle = 6 / sides
+
+	for i = 0,sides-1 do
 		
 		local tmp = copy(s)
 		
-		for _ = 1, i * symmetries.rotation do
-			rotate_shape(tmp)
-			table.insert(candidates, tmp)
-		end
+		rotate_shape(tmp, i * angle)
+		table.insert(candidates, tmp)
 		
-		if symmetries.mirror then
+		if group_type == "D" then
 			tmp = copy(tmp)
 			mirror_shape(tmp)
 			table.insert(candidates, tmp)
@@ -155,6 +166,55 @@ local function make_variants(s, symmetries)
 	return variants
 end
 
+
+--The opposite: find all variants that are *not* equivalent via given symmetry.
+
+local function make_unique(s, symmetries)
+	
+	local symmetries = symmetries or full_symmetries
+	local group_type, sides = parse_symmetry(symmetries)
+	
+	local candidates = {}
+	
+	local angle = 6 / sides
+
+	for i = 0,angle do
+		
+		local tmp = copy(s)
+		
+		rotate_shape(tmp, i)
+		table.insert(candidates, tmp)
+		
+		if group_type == "C" then
+			tmp = copy(tmp)
+			mirror_shape(tmp)
+			table.insert(candidates, tmp)
+		end
+		
+	end
+
+	local variants = {}
+
+	for _,v in ipairs(candidates) do
+
+		canonize_shape(v)
+		local unique = true
+
+		for _,previous in ipairs(variants) do
+			if equal(previous, v) then
+				unique = false
+				break
+			end
+		end
+
+		if unique then
+			table.insert(variants, v)
+		end
+
+	end
+
+	return variants
+end
 
 local function triangle_neighbours(t)
 
@@ -312,5 +372,6 @@ return
 	make_polyamonds = make_polyamonds,
 	uncanonize_triangle = uncanonize_triangle,
 	make_variants = make_variants,
+	make_unique = make_unique,
 	rotate_triangle = rotate_triangle,
 }

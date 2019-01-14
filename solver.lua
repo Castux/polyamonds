@@ -59,40 +59,6 @@ local function remove_shape(state, shape, x, y, id)
 	state.used_pieces[id] = nil
 end
 
-local function reduce_symmetries(variants, symmetries)
-	
-	local added = {}
-	
-	for _,variant in ipairs(variants) do
-		if not added[i] then
-			
-			local others = polyamonds.make_variants(variant, symmetries)
-			for _,other in ipairs(others) do
-				for i,previous in ipairs(variants) do
-				
-					if utils.equal(other,previous) then
-						if i == 1 then
-							added[i] = "base"
-						else
-							added[i] = "duplicate"
-						end
-					end
-				end
-			end
-			
-		end
-	end
-	
-	local result = {}
-	
-	for i,v in ipairs(variants) do
-		if added[i] == "base" then
-			table.insert(result, v)
-		end
-	end
-	
-	return result
-end
 
 local function solve(puzzle, shapes)
 
@@ -107,15 +73,16 @@ local function solve(puzzle, shapes)
 		shapes[i] = polyamonds.make_variants(shape)
 	end
 	
-	-- Reduce the biggest variant to a single shape to remove symmetries in the results
-	-- FIXME: should reduce a shape depending on the symmetry group of the puzzle
-	
+	-- Reduce the least symmetrical piece to variants that are not equivalent
+	-- by the board's symmetry.
+	--[[
 	for i,variants in ipairs(shapes) do
 		if #variants == 12 then
-			shapes[i] = reduce_symmetries(variants, puzzle.symmetries)
+			shapes[i] = polyamonds.make_unique(variants[1], puzzle.symmetries)
 			break
 		end
 	end
+	--]]
 
 	-- Build state
 
