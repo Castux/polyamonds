@@ -119,7 +119,7 @@ end
 
 -- Apply symmetries to a shape to find all possible variants
 
-local function make_variants(s, symmetries, unique)
+local function make_variants(s, symmetries)
 	
 	local symmetries = symmetries or full_symmetries
 	local group_type, sides = parse_symmetry(symmetries)
@@ -171,49 +171,32 @@ end
 
 local function make_unique(s, symmetries)
 	
-	local symmetries = symmetries or full_symmetries
 	local group_type, sides = parse_symmetry(symmetries)
 	
-	local candidates = {}
+	local result = {}
 	
 	local angle = 6 / sides
 
-	for i = 0,angle do
+	for i = 0,angle-1 do
 		
 		local tmp = copy(s)
 		
 		rotate_shape(tmp, i)
-		table.insert(candidates, tmp)
+		table.insert(result, tmp)
 		
 		if group_type == "C" then
 			tmp = copy(tmp)
 			mirror_shape(tmp)
-			table.insert(candidates, tmp)
+			table.insert(result, tmp)
 		end
 		
 	end
-
-	local variants = {}
-
-	for _,v in ipairs(candidates) do
-
+	
+	for _,v in ipairs(result) do
 		canonize_shape(v)
-		local unique = true
-
-		for _,previous in ipairs(variants) do
-			if equal(previous, v) then
-				unique = false
-				break
-			end
-		end
-
-		if unique then
-			table.insert(variants, v)
-		end
-
 	end
 
-	return variants
+	return result
 end
 
 local function triangle_neighbours(t)

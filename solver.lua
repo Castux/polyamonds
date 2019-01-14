@@ -75,14 +75,13 @@ local function solve(puzzle, shapes)
 	
 	-- Reduce the least symmetrical piece to variants that are not equivalent
 	-- by the board's symmetry.
-	--[[
+
 	for i,variants in ipairs(shapes) do
 		if #variants == 12 then
 			shapes[i] = polyamonds.make_unique(variants[1], puzzle.symmetries)
 			break
 		end
 	end
-	--]]
 
 	-- Build state
 
