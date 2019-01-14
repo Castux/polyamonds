@@ -67,12 +67,12 @@ end
 
 local function make_all_puzzles()
 	
-	for i,puzzle in ipairs(puzzles) do
+	for i = 6,6 do
 		print "========="
 		print ("Puzzle " .. i)
 		
 		local fp = io.open("puzzle" .. i .. ".html", "w")
-		make_puzzle_html(fp, puzzle)
+		make_puzzle_html(fp, puzzles[i])
 		fp:close()
 	end
 	

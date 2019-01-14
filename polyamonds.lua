@@ -357,4 +357,5 @@ return
 	make_variants = make_variants,
 	make_unique = make_unique,
 	rotate_triangle = rotate_triangle,
+	rotate_shape = rotate_shape
 }
