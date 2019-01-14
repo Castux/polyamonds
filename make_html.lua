@@ -67,7 +67,7 @@ end
 
 local function make_all_puzzles()
 	
-	for i = 6,6 do
+	for i = 1,#puzzles do
 		print "========="
 		print ("Puzzle " .. i)
 		
@@ -78,10 +78,8 @@ local function make_all_puzzles()
 	
 end
 
---[[
 local fp = io.open("polyamonds.html", "w")
-make_polyamonds_html(fp, 1, 6)
+make_polyamonds_html(fp, 1, 12)
 fp:close()
---]]
 
 make_all_puzzles()

@@ -193,6 +193,34 @@ local function star()
 	return tris
 end
 
+local function shuriken()
+	
+	local tris = {}
+	
+	for x = 0,2 do
+		table.insert(tris, {x, 0, "down"})
+
+		for y = -1,-3,-1 do
+			table.insert(tris, {x, y, "down"})
+			table.insert(tris, {x, y, "up"})			
+		end
+
+		table.insert(tris, {x, -4, "up"})
+	end
+	
+	tmp = utils.copy(tris)
+	
+	for i = 1,2 do
+		polyamonds.rotate_shape(tmp, 2)
+	
+		for i,v in ipairs(tmp) do
+			table.insert(tris, utils.copy(v))
+		end
+	end
+	
+	tris.symmetries = "C3"
+	return tris
+end
 
 return
 {
@@ -201,5 +229,6 @@ return
 	parallelogram2(),
 	arrow(),
 	bar(),
-	star()
+	star(),
+	shuriken()
 }
